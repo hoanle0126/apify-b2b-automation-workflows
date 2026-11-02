@@ -1,0 +1,153 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "B2B Cyber, Network, Compliance & Geo Intelligence API",
+    "version": "1.0.0",
+    "description": "Real-time CVE EPSS exploit scoring, DNS/SPF/DMARC email security auditing, RDAP WHOIS/IP ownership, BGP/RPKI routing intelligence, US Census FIPS geocoding, and NHTSA VIN decoding."
+  },
+  "servers": [
+    {
+      "url": "https://b2b-intel-api.hoanle0126.workers.dev"
+    }
+  ],
+  "paths": {
+    "/v1/security/epss": {
+      "get": {
+        "operationId": "getCveEpssScore",
+        "summary": "Get FIRST.org EPSS exploit probability and percentile for one or more CVEs",
+        "parameters": [
+          {
+            "name": "cve",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "CVE-2024-3094"
+            },
+            "description": "Comma-separated CVE IDs (e.g. CVE-2024-3094,CVE-2023-44487)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "EPSS score and risk classification"
+          }
+        }
+      }
+    },
+    "/v1/network/dns-security": {
+      "get": {
+        "operationId": "auditDomainDnsSecurity",
+        "summary": "Audit domain DNS, MX, SPF, DMARC and email anti-spoofing posture",
+        "parameters": [
+          {
+            "name": "domain",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "cloudflare.com"
+            },
+            "description": "Domain name to audit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "DNS & Email security audit report"
+          }
+        }
+      }
+    },
+    "/v1/network/rdap": {
+      "get": {
+        "operationId": "lookupRdapOwnership",
+        "summary": "Lookup official RDAP registration, ASN/CIDR block, registrar and DNSSEC status",
+        "parameters": [
+          {
+            "name": "target",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1.1.1.1"
+            },
+            "description": "IPv4, IPv6, or domain name"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Normalized RDAP ownership record"
+          }
+        }
+      }
+    },
+    "/v1/network/bgp": {
+      "get": {
+        "operationId": "getBgpRoutingStatus",
+        "summary": "Get BGP routing status, announced prefixes, and RPKI visibility for an ASN or IP prefix",
+        "parameters": [
+          {
+            "name": "resource",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "AS13335"
+            },
+            "description": "ASN (e.g. AS13335) or IP/prefix (e.g. 1.1.1.0/24)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BGP routing intelligence"
+          }
+        }
+      }
+    },
+    "/v1/geo/us-census": {
+      "get": {
+        "operationId": "geocodeUsAddressFips",
+        "summary": "Geocode a US street address to latitude/longitude and official FIPS State/County/Tract/Block codes",
+        "parameters": [
+          {
+            "name": "address",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "1600 Pennsylvania Ave NW, Washington, DC"
+            },
+            "description": "One-line US street address"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Geocoded FIPS and census tract record"
+          }
+        }
+      }
+    },
+    "/v1/auto/vin-decode": {
+      "get": {
+        "operationId": "decodeVehicleVin",
+        "summary": "Decode a 17-character vehicle VIN via NHTSA vPIC into make, model, engine, plant, and safety specs",
+        "parameters": [
+          {
+            "name": "vin",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "5YJ3E1EA7KF317000"
+            },
+            "description": "17-character Vehicle Identification Number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Decoded vehicle specification"
+          }
+        }
+      }
+    }
+  }
+}
